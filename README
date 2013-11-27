@@ -1,0 +1,79 @@
+Copyright 2012-2013 Matthew Harvey
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+
+
+OVERVIEW
+
+Boilermatic is small C++ code-generation tool with a graphical user
+interface. It is intended to automate some of the repetitive tasks
+associated with creating a new class in C++11.
+
+
+DEPENDENCIES
+
+Boilermatic requires:
+
+-	A Tcl interpreter;
+-	Tk; and
+-	Ttk.
+
+Boilermatic has been tested with tclsh8.5 only; however, it is likely
+to work with other Tcl interpreters.
+
+Tk and Ttk are Tcl packages that are likely to be available on most
+systems on which tclsh8.5 is installed.
+
+
+INSTALLATION
+
+-- Unix-like systems --
+
+cd into the source directory, and enter the following sequence of commands:
+
+	chmod +x install.tcl
+	sudo ./install.tcl
+
+This will install Boilermatic to /usr/local/bin.
+To install it to a different location, open "install.tcl" in a text editor
+and change the install_destination variable to the desired location.
+
+To run Boilermatic, simply enter "boilermatic" at the command line.
+It is generally most convenient if you run it from within the project
+directory of your C++ project, as the suggested location for saving the
+generated C++ files will default to the current working directory.
+
+If you have trouble running the script, try changing the first
+line in "boilermatic.tcl" to one of the following, and reinstalling.
+ 
+	#!/usr/bin/env wish
+ 	#!/usr/bin/env tclsh8.5
+	#!/usr/bin/wish
+	#!/usr/bin/tclsh
+	#!/usr/bin/tclsh8.5
+
+
+-- Windows --
+
+Manually copy the file "boilermatic.tcl" to a directory of your choosing.
+Add this directory to your %PATH% if it is not in your %PATH% already.
+
+You may need to associate the file "boilermatic.tcl" with wish or another Tcl
+interpreter. You should then be able to run it either by entering
+"boilermatic" at the command line, or by double-clicking the script's icon
+in Windows Explorer.
+
+
+CONTACT
+
+software@matthewharvey.net
