@@ -480,12 +480,11 @@ namespace eval gui {
     # Parameters:
     #   label_text - text of the label appearing next to the widget;
     #   associated_variable - variable bound to the contents of the ttk::entry
-    #     widget, while the created ttk::entry will be given the name
-    #     ".${associated_variable}_entry";
+    #     widget.
     #   row_num - row number in which grid geometry manager will position
     #     the widget and its label.
     #
-    #   Returns the path of the new ttk::entry widget.
+    # Returns the path of the new ttk::entry widget.
     proc setup_entry_widget {label_text associated_variable row_num} {
         set l [label ".${row_num}_entry_label" -text $label_text \
           {*}[platform::get_background_options]]
