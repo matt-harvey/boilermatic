@@ -192,9 +192,10 @@ namespace eval widget_contents {
     namespace export get_indentation_string
 
     # Call with no arguments.
-    # Returns 1 if the user has selected for the generated C++ files be
-    # added to version control via SVN; otherwise returns 0.
-    namespace export get_whether_adding_to_svn
+    # Returns selected command for adding files to a version control system
+    # (VCS), as a list; returns an empty list if VCS command not
+    # selected.
+    namespace export get_vcs_command
 
     # Call with no arguments to return a list of strings each of which
     # is the symbol for a C++ namespace to be generated.
@@ -221,7 +222,7 @@ namespace eval widget_contents {
     variable access_spec                              ;# array
     variable destructor_is_virtual                    ;# boolean
     variable indentation_style                        ;# string
-    variable adding_to_svn                            ;# boolean
+    variable vcs_command                              ;# list
     variable always_true                              ;# boolean - hack
 
     proc set_cpp_namespaces {text_widget_contents} {
@@ -281,7 +282,7 @@ namespace eval widget_contents {
         }
         variable cpp_namespace_list [list]
         variable indentation_style "Tab"  ;#TODO Not cool
-        variable adding_to_svn 0
+        variable vcs_command [list]
         variable always_true 1
     }
     proc get_header_extension {} {
@@ -380,9 +381,9 @@ namespace eval widget_contents {
         variable indentation_style
         dict get [get_indentation_map] $indentation_style
     }
-    proc get_whether_adding_to_svn {} {
-        variable adding_to_svn
-        return $adding_to_svn
+    proc get_vcs_command {} {
+        variable vcs_command
+        return $vcs_command
     }
     proc get_cpp_namespaces {} {
         variable cpp_namespace_list
@@ -727,13 +728,30 @@ namespace eval gui {
         return [incr row_num]
     }
 
-    # Create widget controlling whether to add the files to SVN. Returns next
-    # available row.
-    proc setup_svn_widget {row_num} {
-        ttk::checkbutton .svn_checkbutton -text "Add to SVN?" \
-          -variable ::widget_contents::adding_to_svn
-        grid .svn_checkbutton -row $row_num -column 1 -sticky w \
+    # Create widget controlling whether to add the files to SVN or Git. Returns
+    # next available row.
+    proc setup_vcs_widgets {row_num} {
+        label .vcs_label -text "Add files to version control?" \
+          {*}[platform::get_background_options]
+        grid .vcs_label -row $row_num -column 0 -sticky e \
           {*}[sizing::get_padding_options]
+        set vcs_widgets_data \
+          [ dict create \
+            ""          "Do not add" \
+            "git add"   "Run \"git add\"" \
+            "svn add"   "Run \"svn add\"" \
+          ]
+        set i 1
+        foreach {command description} $vcs_widgets_data {
+            set rb \
+              [ ttk::radiobutton .vcs_radiobutton_${i} \
+                -variable ::widget_contents::vcs_command \
+                -value $command -text $description \
+              ]
+            grid $rb -row $row_num -column $i -sticky w \
+              {*}[sizing::get_padding_options]
+            incr i
+        }
         return [incr row_num]
     }
 
@@ -758,7 +776,7 @@ namespace eval gui {
               [widget_contents::get_special_member_function_details] \
               [widget_contents::get_cpp_namespaces] \
               [widget_contents::get_indentation_string] \
-              [widget_contents::get_whether_adding_to_svn] \
+              [widget_contents::get_vcs_command] \
         }
         grid .generate_button -row $row_num -column 3 -sticky swe \
           {*}[sizing::get_padding_options]
@@ -784,7 +802,7 @@ namespace eval gui {
                  setup_destructor_virtuality_widget \
                  setup_namespace_widget \
                  setup_indentation_widget \
-                 setup_svn_widget \
+                 setup_vcs_widgets \
                  setup_cancel_and_generate_buttons \
         ]
         set row 0
@@ -951,7 +969,6 @@ namespace eval cpp_code_generation {
 
     # Procedure to generate the C++ files, and populate them with C++
     # boilerplate code, and optionally also add them to version control via
-    # SVN.
     # Parameters:
     #    p_class_name - name of C++ class to be generated
     #    p_header_guard - header guard preprocessor symbol
@@ -971,8 +988,8 @@ namespace eval cpp_code_generation {
     #      in order from outermost to innermost.
     #    p_indentation_string - a string that will comprise the indentation
     #      for the generated C++ code, where indentation is required.
-    #    p_add_to_svn - a boolean value (1 or 0) determining whether the
-    #      generated files will be added to version control via SVN.
+    #    p_vcs_command - a string, either empty, or else a command such as
+    #      "svn add" to be run on each generated file
     namespace export generate
 
 
@@ -991,7 +1008,7 @@ namespace eval cpp_code_generation {
         p_special_member_function_details \
         p_cpp_namespace_list \
         p_indentation_string \
-        p_add_to_svn } {  
+        p_vcs_command } {  
 
         namespace import ::widget_contents::get_access_specifiers
         namespace import ::validation::validate_cpp_identifier
@@ -1036,7 +1053,7 @@ namespace eval cpp_code_generation {
             set ok_to_create_files 0
         }
 
-        set files_added_to_svn [list]
+        set files_added_to_vcs [list]
         set filepaths_created [list]
 
         if $ok_to_create_files {
@@ -1122,16 +1139,17 @@ namespace eval cpp_code_generation {
                   "New file $source_file_path has been created and populated."
             }
 
-            # Add files to SVN if applicable
-            if {$p_add_to_svn} {
+            # Add files to VCS if applicable
+            if {[llength $p_vcs_command] != 0} {
                 foreach filepath $filepaths_created {
-                    set cmd [list svn add $filepath]
+                    set cmd [list {*}$p_vcs_command $filepath]
                     if {[catch {exec {*}$cmd} err_msg]} {
                         lappend user_messages \
                           "Error executing '$cmd': $err_msg"
                     } else {
-                        lappend files_added_to_svn $filepath
-                        lappend user_messages "Added file to SVN: $filepath."
+                        lappend files_added_to_vcs $filepath
+                        lappend user_messages \
+                          "Added version control using \"${p_vcs_command}\": $filepath."
                     }
                 }
             }
@@ -1139,8 +1157,9 @@ namespace eval cpp_code_generation {
 
         # Further messages to user
         set num_new_files_created [llength $filepaths_created]
-        if {[llength $files_added_to_svn] == 0} {
-            lappend user_messages "Files have NOT been added to SVN."
+        if {[llength $files_added_to_vcs] == 0} {
+            lappend user_messages \
+              "Files have NOT been added to version control."
         }
         if {$num_new_files_created != 0} {
             set pl "s"
