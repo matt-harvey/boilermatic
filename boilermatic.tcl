@@ -728,7 +728,8 @@ namespace eval gui {
         return [incr row_num]
     }
 
-    # Create widget controlling whether to add the files to SVN or Git. Returns
+    # Create widgets controlling whether to add the newly created files to version control,
+    # and if so, the shell command with which to to do (e.g. "svn add" or etc.). Returns
     # next available row.
     proc setup_vcs_widgets {row_num} {
         label .vcs_label -text "Add files to version control?" \
@@ -988,8 +989,8 @@ namespace eval cpp_code_generation {
     #      in order from outermost to innermost.
     #    p_indentation_string - a string that will comprise the indentation
     #      for the generated C++ code, where indentation is required.
-    #    p_vcs_command - a string, either empty, or else a command such as
-    #      "svn add" to be run on each generated file
+    #    p_vcs_command - a list, either empty, or else which expands to a shell
+    #      command such as "svn add" to be run on each generated file
     namespace export generate
 
 
