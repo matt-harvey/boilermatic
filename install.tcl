@@ -16,8 +16,8 @@
 # limitations under the License.
 ###
 
-source "project_specs.tcl"
-set executable_filename "${project_name}"
+set executable_filename "boilermatic"
+set source_filename "${executable_filename}.tcl"
 set install_destination "/usr/local/bin"
 set executable_filepath "${install_destination}/${executable_filename}"
 file copy -force $source_filename $executable_filepath
