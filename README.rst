@@ -13,7 +13,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 
 
-OVERVIEW
+Overview
+--------
 
 Boilermatic is small C++ code-generation tool with a graphical user
 interface. It is intended to automate some of the repetitive tasks
@@ -22,8 +23,8 @@ and to reduce the chance of programmer error. The application
 assumes that each class will have its own header and (optionally)
 source file.
 
-
-DEPENDENCIES
+Dependencies
+------------
 
 Boilermatic requires:
 
@@ -37,10 +38,11 @@ to work with other Tcl interpreters.
 Tk and Ttk are Tcl packages that are likely to be available on most
 systems on which tclsh8.5 is installed.
 
+Installation
+------------
 
-INSTALLATION
-
--- Unix-like systems --
+Unix-like systems
+-----------------
 
 cd into the source directory, and enter the following sequence of commands:
 
@@ -51,7 +53,8 @@ This will install Boilermatic to /usr/local/bin.
 To install it to a different location, open "install.tcl" in a text editor
 and change the install_destination variable to the desired location.
 
--- Windows --
+Windows
+-------
 
 Manually copy the file "boilermatic.tcl" to a directory of your choosing.
 Add this directory to your %PATH% if it is not in your %PATH% already.
@@ -62,7 +65,8 @@ interpreter. You should then be able to run it either by entering
 in Windows Explorer.
 
 
-USING BOILERMATIC
+Using Boilermatic
+-----------------
 
 To run the application, enter "boilermatic" at the command line.
 It is generally most convenient if you run it from within the root
@@ -137,6 +141,7 @@ Finally, click "Cancel" to abort, or "Generate" to generate C++ files based
 on your selections. A message box will display a summary of actions taken.
 
 
-CONTACT
+Contact
+-------
 
 boilermatic@matthewharvey.net
