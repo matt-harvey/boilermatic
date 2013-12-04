@@ -46,7 +46,7 @@ Installation
 
 *On Unix-like systems:*
 
-cd into the source directory, and enter the following sequence of commands::
+``cd`` into the source directory, and enter the following sequence of commands::
 
     chmod +x install.tcl
     sudo ./install.tcl
