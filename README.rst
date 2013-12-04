@@ -66,8 +66,8 @@ interpreter. You should then be able to run it either by entering
 in Windows Explorer.
 
 
-Using Boilermatic
------------------
+Usage
+-----
 
 To run the application, enter ``boilermatic`` at the command line.
 It is generally most convenient if you run it from within the root
@@ -131,19 +131,6 @@ newly generated files to this command in turn, check the corresponding box.
 
 Finally, click *Cancel* to abort, or *Generate* to generate C++ files based
 on your selections. A message box will display a summary of actions taken.
-
-Troubleshooting
----------------
-
-If you have trouble running the application and are on a Unix-like system, try
-changing the first line in "boilermatic.tcl" to some other Tcl invocation,
-e.g.::
-
-	#!/usr/bin/env wish
- 	#!/usr/bin/env tclsh8.5
-	#!/usr/bin/wish
-	#!/usr/bin/tclsh
-	#!/usr/bin/tclsh8.5
 
 
 Contact
