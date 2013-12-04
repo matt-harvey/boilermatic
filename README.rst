@@ -41,29 +41,27 @@ systems on which tclsh8.5 is installed.
 Installation
 ------------
 
-    Unix-like systems
-    -----------------
+**On Unix-like systems**
 
-    cd into the source directory, and enter the following sequence of commands:
+cd into the source directory, and enter the following sequence of commands:
 
-        chmod +x install.tcl
+    chmod +x install.tcl
 
-        sudo ./install.tcl
+    sudo ./install.tcl
 
-    This will install Boilermatic to /usr/local/bin.
-    To install it to a different location, open "install.tcl" in a text editor
-    and change the install_destination variable to the desired location.
+This will install Boilermatic to /usr/local/bin.
+To install it to a different location, open "install.tcl" in a text editor
+and change the install_destination variable to the desired location.
 
-    Windows
-    -------
+**On Windows**
 
-    Manually copy the file "boilermatic.tcl" to a directory of your choosing.
-    Add this directory to your %PATH% if it is not in your %PATH% already.
+Manually copy the file "boilermatic.tcl" to a directory of your choosing.
+Add this directory to your %PATH% if it is not in your %PATH% already.
 
-    You may need to associate the file "boilermatic.tcl" with wish or another Tcl
-    interpreter. You should then be able to run it either by entering
-    "boilermatic" at the command line, or by double-clicking the script's icon
-    in Windows Explorer.
+You may need to associate the file "boilermatic.tcl" with wish or another Tcl
+interpreter. You should then be able to run it either by entering
+"boilermatic" at the command line, or by double-clicking the script's icon
+in Windows Explorer.
 
 
 Using Boilermatic
