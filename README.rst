@@ -54,17 +54,17 @@ cd into the source directory, and enter the following sequence of commands::
 
 This will install Boilermatic to /usr/local/bin.
 To install it to a different location, open "install.tcl" in a text editor
-and change the install_destination variable to the desired location.
+and change the ``install_destination`` variable to the desired location.
 
 On Windows
 ..........
 
 Manually copy the file "boilermatic.tcl" to a directory of your choosing.
-Add this directory to your %PATH% if it is not in your %PATH% already.
+Add this directory to your ``PATH`` if it is not there already.
 
 You may need to associate the file "boilermatic.tcl" with wish or another Tcl
 interpreter. You should then be able to run it either by entering
-"boilermatic" at the command line, or by double-clicking the script's icon
+``boilermatic`` at the command line, or by double-clicking the script's icon
 in Windows Explorer.
 
 
@@ -89,13 +89,13 @@ Class name
 ..........
 
 Starting at the top, enter the name of the class you want to create. The
-"Filename stem" box will then be automatically populated based on the class
-name you entered, as will the "Header guard" box. 
+**Filename stem** box will then be automatically populated based on the class
+name you entered, as will the **Header guard** box. 
 
 If you just want header and/or source files created but with no class
-declaration, you can leave "Class name" blank and populate only "Filename stem".
-A suggested header guard will still be generated based on the filename stem you
-enter (see below).
+declaration, you can leave **Class name** blank and populate only
+**Filename stem**. A suggested header guard will still be generated based on the
+filename stem you enter (see below).
 
 Filename stem and header guard
 ..............................
@@ -104,7 +104,7 @@ The filename stem will provide the name of the generated C++ file(s),
 with ".hpp" and ".cpp" extensions added for the header and "source" file,
 respectively.
 
-The "Header guard" box will provide the macro that will serve as the header
+The **Header guard** box will provide the macro that will serve as the header
 guard. This is based on the filename stem, and has a pseudo-random number
 appended to virtually eliminate the possibility of clashes with other header
 guard macros.
@@ -114,7 +114,7 @@ other string (though Boilermatic will reject some strings on the basis that,
 e.g. they are not valid C++ identifiers).
 
 By default, both a ".hpp" and a ".cpp" file will be generated. You can tell
-Boilermatic to produce only a header, by unchecking "Create source file?"
+Boilermatic to produce only a header, by unchecking **Create source file?**
 
 Directory
 .........
@@ -127,7 +127,7 @@ Special member functions
 
 The rest of the GUI should be fairly self-explanatory. For each special
 member function, decide whether you want to explicitly declare it, and
-if so, whether you want to append " = default" or " = delete", or whether
+if so, whether you want to append ``= default`` or ``= delete``, or whether
 you want write the function body yourself ("custom"). You can also
 select whether to make the function public, protected or private. This
 area of the GUI is intended to serve not only as a keystroke-saving
@@ -135,14 +135,14 @@ device, but also as a sort of checklist, so that when creating a new class, it
 becomes an easy exercise to run through the special member functions in turn,
 deciding for each one whether/how that function should be declared.
 
-By default, the destructor will be declared "virtual"; you
-can uncheck the "Make destructor virtual?" box to make it non-virtual.
+By default, the destructor will be declared ``virtual``; you
+can uncheck the **Make destructor virtual?** box to make it non-virtual.
 
 Namespaces
 ..........
 
 If you want to declare the class within one or more namespaces, enter the
-namespace names one row at a time in the "Enclosing namespaces" box.
+namespace names one row at a time in the **Enclosing namespaces** box.
 
 Indentation style
 .................
@@ -158,7 +158,7 @@ newly generated files to this command in turn, check the corresponding box.
 Generating the C++ files
 ........................
 
-Finally, click "Cancel" to abort, or "Generate" to generate C++ files based
+Finally, click **Cancel** to abort, or **Generate** to generate C++ files based
 on your selections. A message box will display a summary of actions taken.
 
 Troubleshooting
