@@ -1,4 +1,4 @@
-Copyright 2012-2013 Matthew Harvey
+**Copyright 2012-2013 Matthew Harvey**
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -28,9 +28,9 @@ Dependencies
 
 Boilermatic requires:
 
--	A Tcl interpreter;
--	Tk; and
--	Ttk.
+-	A Tcl interpreter
+-	Tk
+-	Ttk
 
 Boilermatic has been tested with tclsh8.5 only; however, it is likely
 to work with other Tcl interpreters.
@@ -41,28 +41,29 @@ systems on which tclsh8.5 is installed.
 Installation
 ------------
 
-Unix-like systems
------------------
+    Unix-like systems
+    -----------------
 
-cd into the source directory, and enter the following sequence of commands:
+    cd into the source directory, and enter the following sequence of commands:
 
-	chmod +x install.tcl
-	sudo ./install.tcl
+        chmod +x install.tcl
 
-This will install Boilermatic to /usr/local/bin.
-To install it to a different location, open "install.tcl" in a text editor
-and change the install_destination variable to the desired location.
+        sudo ./install.tcl
 
-Windows
--------
+    This will install Boilermatic to /usr/local/bin.
+    To install it to a different location, open "install.tcl" in a text editor
+    and change the install_destination variable to the desired location.
 
-Manually copy the file "boilermatic.tcl" to a directory of your choosing.
-Add this directory to your %PATH% if it is not in your %PATH% already.
+    Windows
+    -------
 
-You may need to associate the file "boilermatic.tcl" with wish or another Tcl
-interpreter. You should then be able to run it either by entering
-"boilermatic" at the command line, or by double-clicking the script's icon
-in Windows Explorer.
+    Manually copy the file "boilermatic.tcl" to a directory of your choosing.
+    Add this directory to your %PATH% if it is not in your %PATH% already.
+
+    You may need to associate the file "boilermatic.tcl" with wish or another Tcl
+    interpreter. You should then be able to run it either by entering
+    "boilermatic" at the command line, or by double-clicking the script's icon
+    in Windows Explorer.
 
 
 Using Boilermatic
@@ -78,11 +79,15 @@ source file, respectively.
 If you have trouble running the application and are on a Unix-like system, try
 changing the first line in "boilermatic.tcl" to some other Tcl invocation,
 e.g.:
- 
+
 	#!/usr/bin/env wish
+
  	#!/usr/bin/env tclsh8.5
+
 	#!/usr/bin/wish
+
 	#!/usr/bin/tclsh
+
 	#!/usr/bin/tclsh8.5
 
 The application will display a GUI dialog containing several text boxes and
@@ -134,7 +139,7 @@ namespace names one row at a time in the "Enclosing namespaces" box.
 
 You can then select your preferred indentation style.
 
-If you want to run either "git add" or "svn add", passing each of the
+If you want to run either ``git add`` or ``svn add``, passing each of the
 newly generated files to this command in turn, check the corresponding box.
 
 Finally, click "Cancel" to abort, or "Generate" to generate C++ files based
