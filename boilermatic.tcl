@@ -187,6 +187,10 @@ namespace eval widget_contents {
     namespace export get_indentation_styles
 
     # Call with no arguments.
+    # Returns 1 if adding copyright block; otherwise, returs 0
+    namespace export get_whether_copyright_block_enabled
+
+    # Call with no arguments.
     # Returns the actual string which will effect the indentation
     # style currently selected by the user. E.g. "    " (four spaces).
     namespace export get_indentation_string
@@ -207,7 +211,6 @@ namespace eval widget_contents {
     # the C++ header guard symbol will be (almost certainly) unique.
     namespace export configure_header_guard
 
-
 #   RESTRICTED INTERFACE - TO BE ACCESSED BY ASSOCIATED WIDGETS ONLY
 
     variable class_name
@@ -221,6 +224,7 @@ namespace eval widget_contents {
     variable implementation_spec                      ;# array
     variable access_spec                              ;# array
     variable destructor_is_virtual                    ;# boolean
+    variable should_generate_copyright_block          ;# boolean
     variable indentation_style                        ;# string
     variable vcs_command                              ;# list
     variable always_true                              ;# boolean - hack
@@ -281,6 +285,7 @@ namespace eval widget_contents {
               [lindex $implementation_specifiers 0]
         }
         variable cpp_namespace_list [list]
+        variable should_generate_copyright_block 0 ;#TODO Should be determined by config
         variable indentation_style "Tab"  ;#TODO Not cool
         variable vcs_command [list]
         variable always_true 1
@@ -380,6 +385,10 @@ namespace eval widget_contents {
     proc get_indentation_string {} {
         variable indentation_style
         dict get [get_indentation_map] $indentation_style
+    }
+    proc get_whether_copyright_block_enabled {} {
+        variable should_generate_copyright_block
+        return $should_generate_copyright_block
     }
     proc get_vcs_command {} {
         variable vcs_command
@@ -714,6 +723,18 @@ namespace eval gui {
         return [incr row_num 5]
     }
 
+    # Create widget for user to select whether to add copyright block
+    # TODO Should only be created if enabled in config.
+    proc setup_copyright_block_widget {row_num} {
+        # TODO -text should be set to refer to copyright block file in config dir.
+        ttk::checkbutton .copyright_block_checkbutton \
+            -text "Generate copyright block?" \
+            -variable ::widget_contents::should_generate_copyright_block
+        grid .copyright_block_checkbutton -row $row_num -column 1 \
+            -sticky w {*}[sizing::get_padding_options]
+        return [incr row_num]
+    }
+
     # Create widget controlling indentation style. Returns next available row.
     proc setup_indentation_widget {row_num} {
         label .indentation_label -text "Indentation style" \
@@ -802,6 +823,7 @@ namespace eval gui {
                  setup_special_member_function_widgets \
                  setup_destructor_virtuality_widget \
                  setup_namespace_widget \
+                 setup_copyright_block_widget \
                  setup_indentation_widget \
                  setup_vcs_widgets \
                  setup_cancel_and_generate_buttons \
