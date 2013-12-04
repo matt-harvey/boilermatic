@@ -80,20 +80,20 @@ The application will display a GUI dialog containing several text boxes and
 other controls. These are intended to be reasonably self-explanatory for someone
 who is familiar with C++11.
 
-Starting at the top, enter into the **Class name** box the name of the class you
-want to create. The **Filename stem** and **Header guard** boxes will then be
+Starting at the top, enter into the *Class name* box the name of the class you
+want to create. The *Filename stem* and *Header guard* boxes will then be
 automatically populated based on the class name you entered. 
 
-The **Filename stem** box will provide the name of the generated C++ file(s),
+The *Filename stem* box will provide the name of the generated C++ file(s),
 with ".hpp" and ".cpp" extensions added for the header and "source" file,
 respectively.
 
 If you just want the files created but with no class
-declaration, you can leave **Class name** blank and just populate
-**Filename stem** direclly. A suggested header guard will still be generated
+declaration, you can leave *Class name* blank and just populate
+*Filename stem* direclly. A suggested header guard will still be generated
 based on the filename stem you enter.
 
-The **Header guard** box provides the macro to be used in the header
+The *Header guard* box provides the macro to be used in the header
 guard. By default this is based on the filename stem, and has a pseudo-random
 number appended to virtually eliminate the possibility of clashes with other
 macros.
@@ -103,7 +103,7 @@ other string (although Boilermatic will reject some strings on the basis that,
 e.g. they are not valid C++ identifiers).
 
 By default, both a ".hpp" and a ".cpp" file will be generated. You can tell
-Boilermatic to produce only a header, by unchecking **Create source file?**
+Boilermatic to produce only a header, by unchecking *Create source file?*
 
 Next choose the direoctories in which to save the generated header and source
 file (or leave the default directories unchanged).
@@ -119,17 +119,17 @@ becomes an easy exercise to run through the special member functions in turn,
 deciding for each one whether/how that function should be declared.
 
 By default, the destructor will be declared ``virtual``; you
-can uncheck the **Make destructor virtual?** box to make it non-virtual.
+can uncheck the *Make destructor virtual?* box to make it non-virtual.
 
 If you want to declare the class within one or more namespaces, enter the
-namespace names one row at a time in the **Enclosing namespaces** box.
+namespace names one row at a time in the *Enclosing namespaces* box.
 
 You can then select your preferred indentation style.
 
 If you want to run either ``git add`` or ``svn add``, passing each of the
 newly generated files to this command in turn, check the corresponding box.
 
-Finally, click **Cancel** to abort, or **Generate** to generate C++ files based
+Finally, click *Cancel* to abort, or *Generate* to generate C++ files based
 on your selections. A message box will display a summary of actions taken.
 
 Troubleshooting
