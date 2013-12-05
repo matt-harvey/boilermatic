@@ -16,8 +16,6 @@
 # limitations under the License.
 ###
 
-# TODO Install .boilermatic directory in home folder?
-
 set executable_filename "boilermatic"
 set source_filename "${executable_filename}.tcl"
 set install_destination "/usr/local/bin"
