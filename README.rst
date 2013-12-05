@@ -125,10 +125,10 @@ can uncheck *Make destructor virtual* to make it non-virtual.
 If you want to declare the class within one or more namespaces, enter the
 namespace names one row at a time in the *Enclosing namespaces* box.
 
-If you want to add a copyright notice at the top of each generated C++ file,
-check *Generate copyright notice*. However this option is only enabled if
-there is a file named ``copyright_notice`` in the configuration directory.
-(See `Configuring the copyright notice`_.)
+If you want to add a legal notice at the top of each generated C++ file,
+check *Generate legal notice*. However this option is only enabled if
+there is a file named ``legal_notice`` in the configuration directory.
+(See `Configuring the legal notice`_.)
 
 You can then select your preferred indentation style.
 
@@ -152,15 +152,15 @@ in the directory tree until either it finds a directory containing a directory
 named ``.boilermatic``, or else can go no further due to having reached a root
 directory (like ``/`` or ``C:\``).
 
-Configuring the copyright notice
+Configuring the legal notice
 ................................
 
 Currently there is only one configuration option available, namely the text of
-the copyright notice that is placed at the top of the generated files when
-*Generate copyright notice* is checked. This text should be placed in plain
-text form in a file named ``copyright_notice``, within the ``.boilermatic``
+the legal notice that is placed at the top of the generated files when
+*Generate legal notice* is checked. This text should be placed in plain
+text form in a file named ``legal_notice``, within the ``.boilermatic``
 directory. The text in this file should *not* be commented out using ``//`` or
-``/*`` or etc.. Boilermaker will add characters to comment out the copyright
+``/*`` or etc.. Boilermaker will add characters to comment out the legal
 notice as required, when it generates the C++ files.
 
 In future versions, there may be additional configuration options available. It
