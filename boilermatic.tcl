@@ -115,16 +115,17 @@ namespace eval configuration {
 
 #   INTERFACE
     
-    # Call to get the copyright block
-    namespace export get_copyright_block
+    # Call to get the copyright notice string (which will include appropriate
+    # comment-out symbols added).
+    namespace export get_copyright_notice
 
-    # Call to return the filepath of the copyright block configuration
+    # Call to return the filepath of the copyright notice configuration
     # file (or empty string if this file not found).
-    namespace export get_copyright_block_filepath
+    namespace export get_copyright_notice_filepath
 
 #   IMPLEMENTATION DETAILS
 
-    variable copyright_block
+    variable copyright_notice
     variable is_initialized 0
 
     proc get_config_dir {starting_dir} {
@@ -142,12 +143,12 @@ namespace eval configuration {
             set dir $tmp
         }
     }
-    proc get_copyright_block_filepath {{starting_dir [pwd]}} {
+    proc get_copyright_notice_filepath {{starting_dir [pwd]}} {
         set dir [get_config_dir [file normalize $starting_dir]]
         if {[string equal $dir ""]} {
             return ""
         }
-        set fp [file join $dir "copyright_block"]
+        set fp [file join $dir "copyright_notice"]
         if {[file exists $fp] && [file isfile $fp]} {
             return $fp
         }
@@ -156,21 +157,32 @@ namespace eval configuration {
     proc ensure_initialized {} {
         variable is_initialized
         if {!$is_initialized} {
-            set copyright_block_filepath [get_copyright_block_filepath [pwd]]
-            if {[string equal $copyright_block_filepath ""]} {
-                variable copyright_block ""
+            set copyright_notice_filepath [get_copyright_notice_filepath [pwd]]
+            if {[string equal $copyright_notice_filepath ""]} {
+                variable copyright_notice ""
             } else {
-                set infile [open $copyright_block_filepath r]
-                variable copyright_block [read $infile]
+                variable copyright_notice ""
+                set infile [open $copyright_notice_filepath r]
+                set lines_read 0
+                while {[gets $infile line] >= 0} {
+                    incr lines_read
+                    if {$lines_read == 1} {
+                        append copyright_notice "/*\n" 
+                    }
+                    append copyright_notice " * ${line}\n"
+                }
+                if {$lines_read > 0} {
+                    append copyright_notice " */\n"
+                }
                 close $infile
             }
             variable is_initialized 1
         }
     }
-    proc get_copyright_block {} {
+    proc get_copyright_notice {} {
         ensure_initialized
-        variable copyright_block
-        return $copyright_block
+        variable copyright_notice
+        return $copyright_notice
     }
 }
 
@@ -254,8 +266,8 @@ namespace eval widget_contents {
     namespace export get_indentation_styles
 
     # Call with no arguments.
-    # Returns 1 if adding copyright block; otherwise, returs 0
-    namespace export get_whether_copyright_block_enabled
+    # Returns 1 if adding copyright notice; otherwise, returs 0
+    namespace export get_whether_copyright_notice_enabled
 
     # Call with no arguments.
     # Returns the actual string which will effect the indentation
@@ -291,7 +303,7 @@ namespace eval widget_contents {
     variable implementation_spec                      ;# array
     variable access_spec                              ;# array
     variable destructor_is_virtual                    ;# boolean
-    variable should_generate_copyright_block          ;# boolean
+    variable should_generate_copyright_notice          ;# boolean
     variable indentation_style                        ;# string
     variable vcs_command                              ;# list
     variable always_true                              ;# boolean - hack
@@ -352,8 +364,8 @@ namespace eval widget_contents {
               [lindex $implementation_specifiers 0]
         }
         variable cpp_namespace_list [list]
-        variable should_generate_copyright_block \
-            [expr {![string equal [configuration::get_copyright_block] ""]}]
+        variable should_generate_copyright_notice \
+            [expr {![string equal [configuration::get_copyright_notice] ""]}]
         variable indentation_style "Tab"  ;#TODO Not cool
         variable vcs_command [list]
         variable always_true 1
@@ -450,13 +462,13 @@ namespace eval widget_contents {
     proc get_indentation_styles {} {
         return [dict keys [get_indentation_map]]
     }
+    proc get_whether_copyright_notice_enabled {} {
+        variable should_generate_copyright_notice
+        return $should_generate_copyright_notice
+    }
     proc get_indentation_string {} {
         variable indentation_style
         dict get [get_indentation_map] $indentation_style
-    }
-    proc get_whether_copyright_block_enabled {} {
-        variable should_generate_copyright_block
-        return $should_generate_copyright_block
     }
     proc get_vcs_command {} {
         variable vcs_command
@@ -791,24 +803,16 @@ namespace eval gui {
         return [incr row_num 5]
     }
 
-    # Create widget for user to select whether to add copyright block
-    proc setup_copyright_block_widget {row_num} {
-        set msg "Generate copyright block"
-        set cb [configuration::get_copyright_block]
-        set cb_enabled [expr {![string equal $cb ""]}]
-        if {$cb_enabled} {
-            append msg " from file at [configuration::get_copyright_block_filepath]"
-        }
-        append msg "?"
-        ttk::checkbutton .copyright_block_checkbutton \
-            -text $msg \
-            -variable ::widget_contents::should_generate_copyright_block
-        grid .copyright_block_checkbutton -row $row_num -column 1 \
+    # Create widget for user to select whether to add copyright notice
+    proc setup_copyright_notice_widget {row_num} {
+        ttk::checkbutton .copyright_notice_checkbutton \
+            -text "Generate copyright notice?" \
+            -variable ::widget_contents::should_generate_copyright_notice
+        grid .copyright_notice_checkbutton -row $row_num -column 1 \
             -columnspan 4 \
             -sticky w {*}[sizing::get_padding_options]
-        set cb [configuration::get_copyright_block]
-        if {!$cb_enabled} {
-            .copyright_block_checkbutton state "disabled"
+        if {![widget_contents::get_whether_copyright_notice_enabled]} {
+            .copyright_notice_checkbutton state "disabled"
         }
         return [incr row_num]
     }
@@ -827,9 +831,9 @@ namespace eval gui {
         return [incr row_num]
     }
 
-    # Create widgets controlling whether to add the newly created files to version control,
-    # and if so, the shell command with which to to do (e.g. "svn add" or etc.). Returns
-    # next available row.
+    # Create widgets controlling whether to add the newly created files to
+    # version control, and if so, the shell command with which to to do (e.g.
+    # "svn add" or etc.). Returns next available row.
     proc setup_vcs_widgets {row_num} {
         label .vcs_label -text "Add files to version control?" \
           {*}[platform::get_background_options]
@@ -875,6 +879,12 @@ namespace eval gui {
               [widget_contents::get_source_file_directory] \
               [widget_contents::get_special_member_function_details] \
               [widget_contents::get_cpp_namespaces] \
+              [expr { \
+                  [widget_contents::get_whether_copyright_notice_enabled]? \
+                  [configuration::get_copyright_notice]: \
+                  "" \
+                } \
+              ] \
               [widget_contents::get_indentation_string] \
               [widget_contents::get_vcs_command] \
         }
@@ -901,7 +911,7 @@ namespace eval gui {
                  setup_special_member_function_widgets \
                  setup_destructor_virtuality_widget \
                  setup_namespace_widget \
-                 setup_copyright_block_widget \
+                 setup_copyright_notice_widget \
                  setup_indentation_widget \
                  setup_vcs_widgets \
                  setup_cancel_and_generate_buttons \
@@ -1087,6 +1097,8 @@ namespace eval cpp_code_generation {
     #      is a string symbol for a C++ namespace in which the generated
     #      C++ class code will be enclosed. Namespaces should be listed
     #      in order from outermost to innermost.
+    #   p_copyright_notice - a (possible empty) string to be placed at the top
+    #      of each generated file.
     #    p_indentation_string - a string that will comprise the indentation
     #      for the generated C++ code, where indentation is required.
     #    p_vcs_command - a list, either empty, or else which expands to a shell
@@ -1108,6 +1120,7 @@ namespace eval cpp_code_generation {
         p_source_file_directory \
         p_special_member_function_details \
         p_cpp_namespace_list \
+        p_copyright_notice \
         p_indentation_string \
         p_vcs_command } {  
 
@@ -1149,14 +1162,14 @@ namespace eval cpp_code_generation {
               in directory $p_source_file_directory"
         }
         if {$clashes > 0} {
-            lappend user_messages \
-                "New files have NOT been created.\n"
+            lappend user_messages "New files have NOT been created."
             set ok_to_create_files 0
         }
 
         set files_added_to_vcs [list]
         set filepaths_created [list]
 
+        set copyright_notice_ok 0
         if $ok_to_create_files {
 
             # Create the requested C++ header and source files
@@ -1166,9 +1179,17 @@ namespace eval cpp_code_generation {
             }
     
             # Write boilerplate C++ code
+            set copyright_notice_ok \
+              [expr {![string equal $p_copyright_notice ""]}]
+            if {$copyright_notice_ok} {
+                puts $header $p_copyright_notice
+            }
             puts $header \
               "#ifndef ${p_header_guard}\n#define ${p_header_guard}\n"
             if {$p_source_file_enabled} {
+                if {$copyright_notice_ok} {
+                    puts $source_file $p_copyright_notice
+                }
                 puts $source_file "#include \"${p_header_name}\"\n"
             }
             foreach element $p_cpp_namespace_list {
@@ -1261,6 +1282,10 @@ namespace eval cpp_code_generation {
         if {[llength $files_added_to_vcs] == 0} {
             lappend user_messages \
               "Files have NOT been added to version control."
+        }
+        if {!$copyright_notice_ok} {
+            lappend user_messages \
+              "Copyright notice has NOT been generated."
         }
         if {$num_new_files_created != 0} {
             set pl "s"
