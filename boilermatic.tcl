@@ -107,6 +107,73 @@ namespace eval sizing {
     }
 }
 
+###############################################################################
+# Options configured by the user via the contents of the .boilermatic directory
+# are managed here in this namespace.
+
+namespace eval configuration {
+
+#   INTERFACE
+    
+    # Call to get the copyright block
+    namespace export get_copyright_block
+
+    # Call to return the filepath of the copyright block configuration
+    # file (or empty string if this file not found).
+    namespace export get_copyright_block_filepath
+
+#   IMPLEMENTATION DETAILS
+
+    variable copyright_block
+    variable is_initialized 0
+
+    proc get_config_dir {starting_dir} {
+        set dir [file normalize $starting_dir]
+        while {1} {
+            set tmp [file dirname $dir]
+            set conf_path [file join $dir ".boilermatic"]
+            if {[file exists $conf_path] && [file isdirectory $conf_path]} {
+                return $conf_path
+            }
+            if {[string equal $tmp $dir]} {
+                # We're at root
+                return ""
+            }
+            set dir $tmp
+        }
+    }
+    proc get_copyright_block_filepath {{starting_dir [pwd]}} {
+        set dir [get_config_dir [file normalize $starting_dir]]
+        if {[string equal $dir ""]} {
+            return ""
+        }
+        set fp [file join $dir "copyright_block"]
+        if {[file exists $fp] && [file isfile $fp]} {
+            return $fp
+        }
+        return ""
+    }
+    proc ensure_initialized {} {
+        variable is_initialized
+        if {!$is_initialized} {
+            set copyright_block_filepath [get_copyright_block_filepath [pwd]]
+            if {[string equal $copyright_block_filepath ""]} {
+                variable copyright_block ""
+            } else {
+                set infile [open $copyright_block_filepath r]
+                variable copyright_block [read $infile]
+                close $infile
+            }
+            variable is_initialized 1
+        }
+    }
+    proc get_copyright_block {} {
+        ensure_initialized
+        variable copyright_block
+        return $copyright_block
+    }
+}
+
 
 ##############################################################################
 # Data associated with the various widgets is managed in this namespace.
@@ -285,7 +352,8 @@ namespace eval widget_contents {
               [lindex $implementation_specifiers 0]
         }
         variable cpp_namespace_list [list]
-        variable should_generate_copyright_block 0 ;#TODO Should be determined by config
+        variable should_generate_copyright_block \
+            [expr {![string equal [configuration::get_copyright_block] ""]}]
         variable indentation_style "Tab"  ;#TODO Not cool
         variable vcs_command [list]
         variable always_true 1
@@ -724,14 +792,24 @@ namespace eval gui {
     }
 
     # Create widget for user to select whether to add copyright block
-    # TODO Should only be created if enabled in config.
     proc setup_copyright_block_widget {row_num} {
-        # TODO -text should be set to refer to copyright block file in config dir.
+        set msg "Generate copyright block"
+        set cb [configuration::get_copyright_block]
+        set cb_enabled [expr {![string equal $cb ""]}]
+        if {$cb_enabled} {
+            append msg " from file at [configuration::get_copyright_block_filepath]"
+        }
+        append msg "?"
         ttk::checkbutton .copyright_block_checkbutton \
-            -text "Generate copyright block?" \
+            -text $msg \
             -variable ::widget_contents::should_generate_copyright_block
         grid .copyright_block_checkbutton -row $row_num -column 1 \
+            -columnspan 4 \
             -sticky w {*}[sizing::get_padding_options]
+        set cb [configuration::get_copyright_block]
+        if {!$cb_enabled} {
+            .copyright_block_checkbutton state "disabled"
+        }
         return [incr row_num]
     }
 
