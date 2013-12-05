@@ -115,11 +115,11 @@ namespace eval configuration {
 
 #   INTERFACE
     
-    # Call to get the copyright notice string (which will include appropriate
+    # Call to get the legal notice string (which will include appropriate
     # comment-out symbols added).
     namespace export get_legal_notice
 
-    # Call to return the filepath of the copyright notice configuration
+    # Call to return the filepath of the legal notice configuration
     # file (or empty string if this file not found).
     namespace export get_legal_notice_filepath
 
@@ -266,7 +266,7 @@ namespace eval widget_contents {
     namespace export get_indentation_styles
 
     # Call with no arguments.
-    # Returns 1 if adding copyright notice; otherwise, returs 0
+    # Returns 1 if adding legal notice; otherwise, returs 0
     namespace export get_whether_legal_notice_enabled
 
     # Call with no arguments.
@@ -803,10 +803,10 @@ namespace eval gui {
         return [incr row_num 5]
     }
 
-    # Create widget for user to select whether to add copyright notice
+    # Create widget for user to select whether to add legal notice
     proc setup_legal_notice_widget {row_num} {
         ttk::checkbutton .legal_notice_checkbutton \
-            -text "Generate copyright notice?" \
+            -text "Generate legal notice?" \
             -variable ::widget_contents::should_generate_legal_notice
         grid .legal_notice_checkbutton -row $row_num -column 1 \
             -columnspan 4 \
@@ -1285,7 +1285,7 @@ namespace eval cpp_code_generation {
         }
         if {!$legal_notice_ok} {
             lappend user_messages \
-              "Copyright notice has NOT been generated."
+              "Legal notice has NOT been generated."
         }
         if {$num_new_files_created != 0} {
             set pl "s"
