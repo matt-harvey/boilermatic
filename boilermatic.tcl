@@ -1271,7 +1271,7 @@ namespace eval cpp_code_generation {
                     } else {
                         lappend files_added_to_vcs $filepath
                         lappend user_messages \
-                          "Added version control using \"${p_vcs_command}\": $filepath."
+                          "Added to version control using \"${p_vcs_command}\": $filepath."
                     }
                 }
             }
