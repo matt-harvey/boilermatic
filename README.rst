@@ -51,16 +51,16 @@ Installation
     chmod +x install.tcl
     sudo ./install.tcl
 
-This will install Boilermatic to /usr/local/bin.
-To install it to a different location, open "install.tcl" in a text editor
+This will install Boilermatic to ``/usr/local/bin``.
+To install it to a different location, open ``install.tcl`` in a text editor
 and change the ``install_destination`` variable to the desired location.
 
 *On Windows:*
 
-Manually copy the file "boilermatic.tcl" to a directory of your choosing.
+Manually copy the file ``boilermatic.tcl`` to a directory of your choosing.
 Add this directory to your ``PATH`` if it is not there already.
 
-You may need to associate the file "boilermatic.tcl" with wish or another Tcl
+You may need to associate the ``boilermatic.tcl`` file with wish or another Tcl
 interpreter. You should then be able to run it either by entering
 ``boilermatic`` at the command line, or by double-clicking the script's icon
 in Windows Explorer.
@@ -72,8 +72,8 @@ Usage
 To run the application, enter ``boilermatic`` at the command line.
 It is generally most convenient if you run it from within the root
 directory of your C++ project, as the suggested location for the generated C++
-files will default to the current working directory ("."), or to "./include"
-or "./src" if these directories exist, for saving the generated header and
+files will default to the current working directory (``.``), or to ``./include``
+or ``./src`` if these directories exist, for saving the generated header and
 source file, respectively.
 
 The application will display a GUI dialog containing several text boxes and
@@ -85,7 +85,7 @@ want to create. The *Filename stem* and *Header guard* boxes will then be
 automatically populated based on the class name you entered. 
 
 The *Filename stem* box will provide the name of the generated C++ file(s),
-with ".hpp" and ".cpp" extensions added for the header and "source" file,
+with ``.hpp`` and ``.cpp`` extensions added for the header and "source" file,
 respectively.
 
 If you just want the files created but with no class
@@ -102,14 +102,15 @@ You can manually change both the filename stem and header guard to almost any
 other string (although Boilermatic will reject some strings on the basis that,
 e.g. they are not valid C++ identifiers).
 
-By default, both a ".hpp" and a ".cpp" file will be generated. You can tell
+By default, both a ``.hpp`` and a ``.cpp`` file will be generated. You can tell
 Boilermatic to produce only a header, by unchecking *Create source file?*
 
 Next choose the direoctories in which to save the generated header and source
 file (or leave the default directories unchanged).
 
-The rest of the GUI should be fairly self-explanatory. For each special
-member function, decide whether you want to explicitly declare it, and
+The next part of the GUI deals with the C++ special member functions
+(default constructor, copy constructor etc.). For each
+special member function, decide whether you want to declare it explicitly, and
 if so, whether you want to append ``= default`` or ``= delete``, or whether
 you want write the function body yourself ("custom"). You can also
 select whether to make the function public, protected or private. This
@@ -119,10 +120,15 @@ becomes an easy exercise to run through the special member functions in turn,
 deciding for each one whether/how that function should be declared.
 
 By default, the destructor will be declared ``virtual``; you
-can uncheck the *Make destructor virtual?* box to make it non-virtual.
+can uncheck *Make destructor virtual* to make it non-virtual.
 
 If you want to declare the class within one or more namespaces, enter the
 namespace names one row at a time in the *Enclosing namespaces* box.
+
+If you want to add a copyright notice at the top of each generated C++ file,
+check *Generate copyright notice*. However this option is only enabled if
+there is a file named ``copyright_notice`` in the configuration directory.
+(See `Configuring the copyright notice`_.)
 
 You can then select your preferred indentation style.
 
@@ -132,6 +138,34 @@ newly generated files to this command in turn, check the corresponding box.
 Finally, click *Cancel* to abort, or *Generate* to generate C++ files based
 on your selections. A message box will display a summary of actions taken.
 
+Configuration
+-------------
+
+General
+.......
+
+Configuration options should be stored in a directory named ``.boilermatic``.
+Boilermatic must be able to find this directory either directly in the
+directory from which it was invoked, or else in its parent directory,
+or else in its grandparent, or etc.. Boilermatic will continue looking higher
+in the directory tree until either it finds a directory containing a directory
+named ``.boilermatic``, or else can go no further due to having reached a root
+directory (like ``/`` or ``C:\``).
+
+Configuring the copyright notice
+................................
+
+Currently there is only one configuration option available, namely the text of
+the copyright notice that is placed at the top of the generated files when
+*Generate copyright notice* is checked. This text should be placed in plain
+text form in a file named ``copyright_notice``, within the ``.boilermatic``
+directory. The text in this file should *not* be commented out using ``//`` or
+``/*`` or etc.. Boilermaker will add characters to comment out the copyright
+notice as required, when it generates the C++ files.
+
+In future versions, there may be additional configuration options available. It
+is expected that any such options will be managed within the ``.boilermatic``
+directory.
 
 Contact
 -------
