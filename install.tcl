@@ -16,6 +16,9 @@
 # limitations under the License.
 ###
 
+# Note this script is intended for use on Unix-like systems only;
+# hence non-portable filepaths.
+
 set executable_filename "boilermatic"
 set source_filename "${executable_filename}.tcl"
 set install_destination "/usr/local/bin"
