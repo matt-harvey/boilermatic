@@ -160,7 +160,7 @@ the legal notice that is placed at the top of the generated files when
 *Generate legal notice* is checked. This text should be placed in plain
 text form in a file named ``legal_notice``, within the ``.boilermatic``
 directory. The text in this file should *not* be commented out using ``//`` or
-``/*`` or etc.. Boilermaker will add characters to comment out the legal
+``/*`` or etc.. Boilermatic will add characters to comment out the legal
 notice as required, when it generates the C++ files.
 
 In future versions, there may be additional configuration options available. It
