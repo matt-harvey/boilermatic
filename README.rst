@@ -15,7 +15,6 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 
-
 Overview
 --------
 
@@ -65,7 +64,6 @@ interpreter. You should then be able to run it either by entering
 ``boilermatic`` at the command line, or by double-clicking the script's icon
 in Windows Explorer.
 
-
 Usage
 -----
 
@@ -105,7 +103,7 @@ e.g. they are not valid C++ identifiers).
 By default, both a ``.hpp`` and a ``.cpp`` file will be generated. You can tell
 Boilermatic to produce only a header, by unchecking *Create source file?*
 
-Next choose the direoctories in which to save the generated header and source
+Next choose the directories in which to save the generated header and source
 file (or leave the default directories unchanged).
 
 The next part of the GUI deals with the C++ special member functions
@@ -153,7 +151,7 @@ named ``.boilermatic``, or else can go no further due to having reached a root
 directory (like ``/`` or ``C:\``).
 
 Configuring the legal notice
-................................
+............................
 
 Currently there is only one configuration option available, namely the text of
 the legal notice that is placed at the top of the generated files when
