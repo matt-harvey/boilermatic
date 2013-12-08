@@ -23,7 +23,7 @@ interface. It is intended to automate some of the tasks
 associated with writing a new class in C++11, both to save time,
 and to reduce the chance of programmer error. It would be of most use
 to developers who have a command line based workflow, and would like
-certain repetitive tasks to be automated, but don't want to commit to
+certain repetitive tasks to be automated, without having to commit to
 a full-blown IDE.
 
 Boilermatic assumes that each class will have its own header and (optionally)
