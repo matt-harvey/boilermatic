@@ -1,5 +1,5 @@
-Copying
--------
+Legal
+-----
 
 Copyright 2012-2013 Matthew Harvey
 
