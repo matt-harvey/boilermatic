@@ -18,11 +18,15 @@ limitations under the License.
 Overview
 --------
 
-Boilermatic is small C++ code-generation tool with a graphical user
-interface. It is intended to automate some of the repetitive tasks
+Boilermatic is C++ code generation tool with a lightweight graphical user
+interface. It is intended to automate some of the tasks
 associated with writing a new class in C++11, both to save time,
-and to reduce the chance of programmer error. The application
-assumes that each class will have its own header and (optionally)
+and to reduce the chance of programmer error. It would be of most use
+to developers who have a command line based workflow, and would like
+certain repetitive tasks to be automated, but don't want to commit to
+a full-blown IDE.
+
+Boilermatic assumes that each class will have its own header and (optionally)
 source file.
 
 Dependencies
