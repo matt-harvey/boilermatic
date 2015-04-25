@@ -34,9 +34,9 @@ Dependencies
 
 Boilermatic requires:
 
--	A Tcl interpreter
--	Tk
--	Ttk
+-    A Tcl interpreter
+-    Tk
+-    Ttk
 
 Boilermatic has been tested with tclsh8.5 only; however, it is likely
 to work with other Tcl interpreters.
